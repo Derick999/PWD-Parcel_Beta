@@ -1,0 +1,6 @@
+/express-api/node_modules
+/express-api/package-lock.json
+/express-api/database/index.js
+
+/express-ui/node_modules
+/express-ui/package-lock.json
