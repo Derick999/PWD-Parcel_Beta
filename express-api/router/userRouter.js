@@ -7,10 +7,11 @@ const {
   transporter,
   transportPromise
 } = require("../helper");
+const {validatorRegister} = require("../middlewares")
 
 
-// Register Authentication Flow
-router.post("/register", async (req, res) => {
+
+router.post("/register", validatorRegister, async (req, res) => {
   let { username, password, email,} = req.body;
   password = hashPassword(password);
   try {
@@ -21,7 +22,7 @@ router.post("/register", async (req, res) => {
       from: "Admin <dickymaulanaa@gmail.com>",
       to: email,
       subject: "Email Verification",
-      html: `<h1>Welcome ${username} to Commerce</h1> <br> <a href="http://localhost:3000/verify?username=${username}&password=${password}">Click Here to Verify your Account</a>`,
+      html: `<h1>Welcome ${username} to Parcel</h1> <br> <a href="http://localhost:3000/verify?username=${username}&password=${password}">Click Here to Verify your Account</a>`,
     };
     await transportPromise(mailOptions);
     const select = await query(
@@ -59,5 +60,6 @@ router.post("/email-verification", (req, res) => {
     });
   });
 });
+
 
 module.exports = router;

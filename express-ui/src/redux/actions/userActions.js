@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import Axios from "axios";
 import { api_url } from "../../helpers";
 import {
@@ -10,11 +11,18 @@ import {
 const url = api_url + "/users";
 
 
+
 export const registerAction = (data) => {
   return async (dispatch) => {
-    dispatch({ type: API_USER_START });
     try {
+      dispatch({ type: API_USER_START });
       const response = await Axios.post(`${url}/register`, data);
+      if( response.status === 202 ){
+        dispatch({
+          type: API_USER_SUCCESS,
+        });
+        return Swal.fire(response.data.message)
+      }
       const {
         id,
         username,
@@ -28,6 +36,12 @@ export const registerAction = (data) => {
         type: LOGIN,
         payload: { id, username, email, roleID, verified },
       });
+      Swal.fire({
+        icon: 'success',
+        title: 'Anda telah berhasil register',
+        text: 'Cek email untuk verifikasi akun ',
+      })
+
       dispatch({
         type: API_USER_SUCCESS,
       });
